@@ -9,19 +9,21 @@ qTranslateConfig.js={
 		var form=document.getElementById('post');
 		if(!form) return false;
 
-		qtx.addContentHookByIdC('title',form);
-		qtx.addContentHookByIdC('excerpt',form);
+		qtx.addContentHookByIdC('title');
+		qtx.addContentHookByIdC('excerpt');
 
 		var wpEditorAreas=form.getElementsByClassName('wp-editor-area');
 		for(var i=0; i<wpEditorAreas.length; ++i){
 			var wpEditorArea=wpEditorAreas[i];
-			qtx.addContentHookC(wpEditorArea,form);
+			qtx.addContentHookC(wpEditorArea);
 		}
 
-		qtx.addContentHookByIdC('attachment_caption',form);
-		qtx.addContentHookByIdB('attachment_alt',form);
+		qtx.addContentHookByIdC('attachment_caption');
+		qtx.addContentHookByIdB('attachment_alt');
 
-		qtx.addCustomContentHooks(form);
+		qtx.addCustomContentHooks();
+
+		qtx.addDisplayHooksByClass('gallery_caption',form);
 
 		// Slug
 		function convertURL(url,lang)
@@ -92,20 +94,17 @@ qTranslateConfig.js={
 		}
 		this.setSlugLanguage(qtx.getActiveLanguage());
 
-		qtx.addContentHooksTinyMCE();
+		//qtx.addContentHooksTinyMCE();// always called in the framework
 
 		/**
-		 * Since 3.2.4 Multiple sets of Language Switching Buttons
+		 * @since 3.2.4 Multiple sets of Language Switching Buttons
 		 */
 		if( !qTranslateConfig.page_config ) qTranslateConfig.page_config={};
 		if( !qTranslateConfig.page_config.anchors)
 			qTranslateConfig.page_config.anchors = ['post','postexcerpt'];//,'slugdiv'
 
+		qtx.addLanguageSwitchAfterListener(this.setSlugLanguage);
+
 		return true;
-	}
-,
-	onTabSwitch: function(lang,qtx)
-	{
-		this.setSlugLanguage(lang);
 	}
 };

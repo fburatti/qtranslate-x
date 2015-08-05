@@ -7,28 +7,29 @@ qTranslateConfig.js={
 		var form=document.getElementById('update-nav-menu');
 		if(!form) return false;
 
-		addMenuItemHooks=function(li,form)
+		addMenuItemHooks=function(li)
 		{
-			qtx.addContentHooksByClass('edit-menu-item-title',form,li);
-			qtx.addContentHooksByClass('edit-menu-item-attr-title',form,li);
-			qtx.addContentHooksByClass('[edit-menu-item-description',form,li);//must use '[:]' separator style
+			qtx.addContentHooksByClass('edit-menu-item-title',li);
+			qtx.addContentHooksByClass('edit-menu-item-attr-title',li);
+			qtx.addContentHooksByClass('[edit-menu-item-description',li);//must use '[:]' separator style
 
 			qtx.addDisplayHooksByClass('menu-item-title',li);
+			qtx.addDisplayHooksByClass('item-title',li);
 			qtx.addDisplayHooksByTagInClass('link-to-original','A',li);
 		}
 
-		function addPageHooks(qtx,form)
+		function addMenuPageHooks(qtx)
 		{
 			var items=document.getElementsByClassName('menu-item');
 			for(var i=0; i<items.length; ++i)
 			{
 				var li=items[i];
-				addMenuItemHooks(li,form);
+				addMenuItemHooks(li);
 			}
 			var sst = document.getElementById('side-sortables');
 			if(sst) qtx.addDisplayHooksByClass('menu-item-title',sst);
 		}
-		addPageHooks(qtx,form);
+		addMenuPageHooks(qtx);
 
 		if(wpNavMenu){
 			var wp_addMenuItemToBottom = wpNavMenu.addMenuItemToBottom;
@@ -40,19 +41,20 @@ qTranslateConfig.js={
 						var id = 'menu-item-'+matches[1];
 						var li = document.getElementById(id);
 						if(li)
-							addMenuItemHooks(li,form);
+							addMenuItemHooks(li);
 					}
 				};
 			}
 		}
 
-		this.onTabSwitch(qtx.getActiveLanguage(),qtx);
+		//this.onTabSwitch(qtx.getActiveLanguage());
+		this.onTabSwitch();
 		this.langSwitchWrapAnchor=form;//causes buttons to be inserted in front of this form instead of the first form in div "wrap"
 
 		return true;
 	}
 ,
-	onTabSwitch: function(lang,qtx)
+	onTabSwitch: function()
 	{
 		if(wpNavMenu){
 			if( typeof wpNavMenu.refreshKeyboardAccessibility == 'function'){
